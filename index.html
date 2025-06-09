@@ -1,46 +1,2353 @@
----
-layout: page
-description: "「离开世界之前 一切都是过程」"
----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="AI API, GPT-4, Claude, Gemini, 人工智能接口, 大语言模型, LLM, 统一API, AI开发, API网关, 价格优惠, OpenAI替代，OpenAI API, Claude API, Gemini API, API中转, API代理, ChatGPT API, UIUI API">
+    <meta name="description" content="UIUI API 是一个专为国内开发者打造的AI API中转平台。我们提供稳定、高速、低延迟的OpenAI(ChatGPT)、Claude、Gemini、DeepSeek等多种大模型官方API接口。无需翻墙，即刻获取您的专属API Key，轻松集成到您的应用中。
+">
+    <title>UIUI API - 国内api中转 申请获取OpenAI APIKey获取以及claude、gemini、deepseek等稳定高效的OpenAI/Claude/Gemini API国内中转平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset and Basic Styles */
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff6b6b;
+            --success-color: #51cf66;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --card-hover-bg: #252525;
+            --text-color: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a2a2a;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        }
 
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {% if post.lang == 'en' %}
-                {{ post.content | strip_html | truncate:300 }}
-            {% else %}
-                {{ post.content | strip_html | truncate:200 }}
-            {% endif %}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+            padding: 15px 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '⚡';
+            font-size: 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 15px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cta-button {
+            background: var(--gradient-primary);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.3);
+        }
+
+        /* Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateY(-100vh) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(106, 17, 203, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom, rgba(37, 117, 252, 0.15) 0%, transparent 60%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(106, 17, 203, 0.05) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 8vw, 72px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            animation: gradient-shift 5s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: clamp(18px, 2.5vw, 22px);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: 2px solid var(--primary-color);
+        }
+
+        .secondary-button:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.3);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 80px 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        /* Partners Section */
+        .partners {
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partners h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .partner-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 60px;
+            filter: grayscale(1) brightness(1.5);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logos:hover {
+            filter: grayscale(0.5) brightness(1.2);
+            opacity: 0.8;
+        }
+
+        .partner-logos img,
+        .partner-logos svg {
+            height: 70px !important;
+            width: auto !important;
+            max-width: 240px;
+            transition: transform 0.3s ease;
+        }
+
+        .partner-logos img:hover,
+        .partner-logos svg:hover {
+            transform: scale(1.1);
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 50px 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card .icon {
+            font-size: 56px;
+            margin-bottom: 25px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .feature-card:nth-child(2) .icon {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(3) .icon {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Use Cases Section */
+        .use-cases {
+            background: var(--card-bg);
+            padding: 100px 0;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .use-case-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .use-case-item:hover {
+            background: var(--card-hover-bg);
+            transform: translateY(-5px);
+        }
+
+        .use-case-item .emoji {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .use-case-item h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .use-case-item p {
+            color: var(--text-secondary);
+        }
+
+        /* Developer Section */
+        .developer-section {
+            background-color: var(--dark-bg);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .developer-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .developer-text {
+            flex: 1;
+        }
+
+        .developer-text h2 {
+            font-size: 42px;
+            margin-bottom: 25px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .developer-text p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .developer-features {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .dev-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+
+        .dev-feature .check {
+            color: var(--success-color);
+            font-size: 20px;
+        }
+
+        /* Code Showcase */
+        .code-showcase {
+            flex: 1.2;
+            background-color: #0d0d0d;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .code-header {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f56;
+        }
+
+        .code-dot:nth-child(2) {
+            background: #ffbd2e;
+        }
+
+        .code-dot:nth-child(3) {
+            background: #27c93f;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 20px;
+            margin-left: auto;
+        }
+
+        .code-tab {
+            padding: 5px 15px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .code-tab.active {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .code-content {
+            padding: 30px;
+            font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-showcase pre {
+            white-space: pre-wrap;
+            color: #ccc;
+            margin: 0;
+        }
+
+        .code-showcase .code-line .comment { color: #6a9955; }
+        .code-showcase .code-line .keyword { color: #569cd6; }
+        .code-showcase .code-line .string { color: #ce9178; }
+        .code-showcase .code-line .function { color: #dcdcaa; }
+        .code-showcase .code-line .variable { color: #9cdcfe; }
+        .code-showcase .code-line .number { color: #b5cea8; }
+
+        #typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #fff;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: var(--dark-bg);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            padding: 50px 40px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: '最受欢迎';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--gradient-primary);
+            color: #fff;
+            padding: 5px 40px;
+            font-size: 12px;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: var(--primary-color);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-card h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .pricing-card .price {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-card .price-unit {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .pricing-card .price-desc {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .pricing-card li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+        }
+
+        .pricing-card li::before {
+            content: '✓';
+            color: var(--success-color);
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: var(--dark-bg);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .author-info h4 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 100px 0;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-color);
+        }
+
+        .faq-question {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .faq-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 30px 25px;
+            max-height: 300px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: var(--gradient-primary);
+            padding: 100px 40px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .cta-section h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section .cta-button {
+            background: #fff;
+            color: var(--primary-color);
+            font-size: 18px;
+            padding: 15px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section .cta-button:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 80px 0 40px;
+            border-top: 1px solid var(--border-color);
+            background: var(--dark-bg);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-secondary);
+        }
+
+        .social-links a:hover {
+            background: var(--gradient-primary);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-bottom p {
+            color: var(--text-secondary);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.3);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s ease-out;
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .developer-content {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 60px auto 0;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links,
+            .header .cta-button {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero {
+                padding: 100px 15px 60px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+                line-height: 1.3;
+            }
+
+            .hero p {
+                font-size: 16px;
+                padding: 0 10px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .cta-button,
+            .secondary-button {
+                width: 100%;
+                text-align: center;
+                font-size: 16px;
+            }
+
+            .stats-section {
+                padding: 50px 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .stat-item h3 {
+                font-size: 36px;
+            }
+
+            .stat-item p {
+                font-size: 14px;
+            }
+
+            .partners {
+                padding: 40px 0;
+            }
+
+            .partner-logos {
+                gap: 30px;
+                padding: 0 15px;
+            }
+
+            .partner-logos svg {
+                height: 50px !important;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .section-title h2 {
+                font-size: 28px;
+            }
+
+            .section-title p {
+                font-size: 16px;
+                padding: 0 10px;
+            }
+
+            .features-grid,
+            .use-cases-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 35px 25px;
+            }
+
+            .feature-card .icon {
+                font-size: 48px;
+            }
+
+            .feature-card h3 {
+                font-size: 20px;
+            }
+
+            .use-case-item {
+                padding: 20px;
+            }
+
+            .use-case-item .emoji {
+                font-size: 48px;
+            }
+
+            .developer-content {
+                gap: 30px;
+            }
+
+            .developer-text h2 {
+                font-size: 32px;
+            }
+
+            .developer-text p {
+                font-size: 16px;
+            }
+
+            .developer-features {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .code-showcase {
+                margin: 0 -15px;
+                border-radius: 0;
+            }
+
+            .code-header {
+                padding: 12px 15px;
+            }
+
+            .code-tabs {
+                gap: 10px;
+            }
+
+            .code-tab {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+
+            .code-content {
+                padding: 20px 15px;
+                font-size: 12px;
+                overflow-x: auto;
+            }
+
+            .pricing-section .container > div {
+                gap: 20px;
+            }
+
+            .testimonial-card {
+                padding: 30px 20px;
+            }
+
+            .testimonial-content {
+                font-size: 15px;
+            }
+
+            .faq-container {
+                padding: 0 10px;
+            }
+
+            .faq-question {
+                padding: 20px;
+                font-size: 16px;
+            }
+
+            .faq-answer {
+                font-size: 14px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 30px;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .cta-section {
+                padding: 60px 20px;
+                border-radius: 16px;
+            }
+
+            .cta-section h2 {
+                font-size: 28px;
+                line-height: 1.3;
+            }
+
+            .cta-section p {
+                font-size: 16px;
+            }
+
+            .scroll-to-top {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 24px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .partner-logos {
+                gap: 20px;
+                flex-direction: column;
+            }
+
+            .partner-logos svg {
+                height: 40px !important;
+            }
+
+            .section-title h2 {
+                font-size: 24px;
+            }
+
+            .feature-card {
+                padding: 30px 20px;
+            }
+
+            .pricing-card {
+                padding: 30px 20px;
+            }
+
+            .pricing-card h3 {
+                font-size: 24px;
+            }
+
+            .pricing-card .price {
+                font-size: 42px;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured::before {
+                display: none;
+            }
+
+            .faq-question {
+                padding: 18px 15px;
+                font-size: 15px;
+            }
+
+            /* 价格说明部分的移动端优化 */
+            .pricing-section .container > div > div {
+                min-width: 100%;
+            }
+
+            .pricing-section h3 {
+                font-size: 20px !important;
+            }
+
+            .pricing-section h4 {
+                font-size: 16px !important;
+            }
+
+            .pricing-section p {
+                font-size: 14px !important;
+            }
+
+            /* 调整价格对比卡片 */
+            .pricing-section .container div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* 调整充值优惠和成本对比文字大小 */
+            .pricing-section span[style*="font-size: 24px"] {
+                font-size: 20px !important;
+            }
+
+            .pricing-section span[style*="font-size: 22px"] {
+                font-size: 18px !important;
+            }
+
+            /* 底部总结网格 */
+            .pricing-section div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+        }
+
+        /* 更小屏幕的额外优化 */
+        @media (max-width: 360px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .section-title h2 {
+                font-size: 22px;
+            }
+
+            .feature-card h3 {
+                font-size: 18px;
+            }
+
+            .pricing-card .price {
+                font-size: 36px;
+            }
+        }
+
+        /* 横屏模式优化 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                min-height: auto;
+                padding: 80px 20px 40px;
+            }
+
+            .section {
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container navbar">
+            <a href="#" class="logo">UIUI API</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#features">核心优势</a></li>
+                    <li><a href="#use-cases">使用场景</a></li>
+                    <li><a href="#developer">开发者</a></li>
+                    <li><a href="#pricing">价格方案</a></li>
+                    <li><a href="#faq">常见问题</a></li>
+                    <li><a href="https://uiuiapi.comr" class="cta-button">立即开始</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
-</div>
-<hr>
-{% endfor %}
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#features">核心优势</a>
+            <a href="#use-cases">使用场景</a>
+            <a href="#developer">开发者</a>
+            <a href="#pricing">价格方案</a>
+            <a href="https://uiuiapi.com">立即开始</a>
+        </div>
+    </header>
 
-<!-- Pager -->
-{% if paginator.total_pages > 1 %}
-<ul class="pager">
-    {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
-    </li>
-    {% endif %}
-    {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content fade-in">
+                <h1>一个API，驱动无限AI潜能</h1>
+                <p>统一集成OpenAI、Claude、Gemini等全球顶尖AI模型。通过UIUI API，开发者可以享受前所未有的灵活性、高性能和成本效益。</p>
+                <div class="hero-buttons">
+                    <a href="https://uiuiapi.com" class="cta-button">免费获取API密钥</a>
+                    <a href="#features" class="secondary-button">了解更多</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item fade-in">
+                        <h3>50K+</h3>
+                        <p>活跃开发者</p>
+                    </div>
+                    <div class="stat-item fade-in" style="transition-delay: 100ms;">
+                        <h3>10M+</h3>
+                        <p>每日API调用</p>
+                    </div>
+                    <div class="stat-item fade-in" style="transition-delay: 200ms;">
+                        <h3>99.9%</h3>
+                        <p>服务可用性</p>
+                    </div>
+                    <div class="stat-item fade-in" style="transition-delay: 300ms;">
+                        <h3>15+</h3>
+                        <p>支持的AI模型</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="partners">
+            <div class="container fade-in">
+                <h3>已集成全球领先的几十家AI模型提供商</h3>
+                <div class="partner-logos">
+                    <!-- OpenAI Logo -->
+                    <svg fill="currentColor" fill-rule="evenodd" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="flex: 0 0 auto; line-height: 1;"><title>OpenAI</title><path d="M21.55 10.004a5.416 5.416 0 00-.478-4.501c-1.217-2.09-3.662-3.166-6.05-2.66A5.59 5.59 0 0010.831 1C8.39.995 6.224 2.546 5.473 4.838A5.553 5.553 0 001.76 7.496a5.487 5.487 0 00.691 6.5 5.416 5.416 0 00.477 4.502c1.217 2.09 3.662 3.165 6.05 2.66A5.586 5.586 0 0013.168 23c2.443.006 4.61-1.546 5.361-3.84a5.553 5.553 0 003.715-2.66 5.488 5.488 0 00-.693-6.497v.001zm-8.381 11.558a4.199 4.199 0 01-2.675-.954c.034-.018.093-.05.132-.074l4.44-2.53a.71.71 0 00.364-.623v-6.176l1.877 1.069c.02.01.033.029.036.05v5.115c-.003 2.274-1.87 4.118-4.174 4.123zM4.192 17.78a4.059 4.059 0 01-.498-2.763c.032.02.09.055.131.078l4.44 2.53c.225.13.504.13.73 0l5.42-3.088v2.138a.068.068 0 01-.027.057L9.9 19.288c-1.999 1.136-4.552.46-5.707-1.51h-.001zM3.023 8.216A4.15 4.15 0 015.198 6.41l-.002.151v5.06a.711.711 0 00.364.624l5.42 3.087-1.876 1.07a.067.067 0 01-.063.005l-4.489-2.559c-1.995-1.14-2.679-3.658-1.53-5.63h.001zm15.417 3.54l-5.42-3.088L14.896 7.6a.067.067 0 01.063-.006l4.489 2.557c1.998 1.14 2.683 3.662 1.529 5.633a4.163 4.163 0 01-2.174 1.807V12.38a.71.71 0 00-.363-.623zm1.867-2.773a6.04 6.04 0 00-.132-.078l-4.44-2.53a.731.731 0 00-.729 0l-5.42 3.088V7.325a.068.068 0 01.027-.057L14.1 4.713c2-1.137 4.555-.46 5.707 1.513.487.833.664 1.809.499 2.757h.001zm-11.741 3.81l-1.877-1.068a.065.065 0 01-.036-.051V6.559c.001-2.277 1.873-4.122 4.181-4.12.976 0 1.92.338 2.671.954-.034.018-.092.05-.131.073l-4.44 2.53a.71.71 0 00-.365.623l-.003 6.173v.002zm1.02-2.168L12 9.25l2.414 1.375v2.75L12 14.75l-2.415-1.375v-2.75z"></path></svg>
+
+                    <!-- Anthropic Logo -->
+                    <svg height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="flex: 0 0 auto; line-height: 1;"><title>Claude</title><path d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z" fill="#D97757" fill-rule="nonzero"></path></svg>
+
+                    <!-- Google Logo -->
+                    <svg height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="flex: 0 0 auto; line-height: 1;"><title>Gemini</title><defs><linearGradient id="lobe-icons-gemini-fill" x1="0%" x2="68.73%" y1="100%" y2="30.395%"><stop offset="0%" stop-color="#1C7DFF"></stop><stop offset="52.021%" stop-color="#1C69FF"></stop><stop offset="100%" stop-color="#F0DCD6"></stop></linearGradient></defs><path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" fill="url(#lobe-icons-gemini-fill)" fill-rule="nonzero"></path></svg>
+
+                    <!-- Midjourney Logo -->
+                    <svg fill="currentColor" fill-rule="evenodd" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="flex: 0 0 auto; line-height: 1;"><title>Midjourney</title><path d="M22.369 17.676c-1.387 1.259-3.17 2.378-5.332 3.417.044.03.086.057.13.083l.018.01.019.012c.216.123.42.184.641.184.222 0 .426-.061.642-.184l.018-.011.019-.011c.14-.084.266-.178.492-.366l.178-.148c.279-.232.426-.342.625-.456.304-.174.612-.266.949-.266.337 0 .645.092.949.266l.023.014c.188.109.334.219.602.442l.178.148c.221.184.346.278.483.36l.028.017.018.01c.21.12.407.181.62.185h.022a.31.31 0 110 .618c-.337 0-.645-.092-.95-.266a3.137 3.137 0 01-.09-.054l-.022-.014-.022-.013-.02-.014a5.356 5.356 0 01-.49-.377l-.159-.132a3.836 3.836 0 00-.483-.36l-.027-.017-.019-.01a1.256 1.256 0 00-.641-.185c-.222 0-.426.061-.641.184l-.02.011-.018.011c-.14.084-.266.178-.492.366l-.158.132a5.125 5.125 0 01-.51.39l-.022.014-.022.014-.09.054a1.868 1.868 0 01-.95.266c-.337 0-.644-.092-.949-.266a3.137 3.137 0 01-.09-.054l-.022-.014-.022-.013-.026-.017a4.881 4.881 0 01-.425-.325.308.308 0 01-.12-.1l-.098-.081a3.836 3.836 0 00-.483-.36l-.027-.017-.019-.01a1.256 1.256 0 00-.641-.185c-.222 0-.426.061-.642.184l-.018.011-.019.011c-.14.084-.266.178-.492.366l-.158.132a5.125 5.125 0 01-.51.39l-.023.014-.022.014-.09.054A1.868 1.868 0 0112 22c-.337 0-.645-.092-.949-.266a3.137 3.137 0 01-.09-.054l-.022-.014-.022-.013-.021-.014a5.356 5.356 0 01-.49-.377l-.158-.132a3.836 3.836 0 00-.483-.36l-.028-.017-.018-.01a1.256 1.256 0 00-.642-.185c-.221 0-.425.061-.641.184l-.019.011-.018.011c-.141.084-.266.178-.492.366l-.158.132a5.125 5.125 0 01-.511.39l-.022.014-.022.014-.09.054a1.868 1.868 0 01-.986.264c-.746-.09-1.319-.38-1.89-.866l-.035-.03c-.047-.041-.118-.106-.192-.174l-.196-.181-.107-.1-.011-.01a1.531 1.531 0 00-.336-.253.313.313 0 00-.095-.03h-.005c-.119.022-.238.059-.361.11a.308.308 0 01-.077.061l-.008.005a.309.309 0 01-.126.034 5.66 5.66 0 00-.774.518l-.416.324-.055.043a6.542 6.542 0 01-.324.236c-.305.207-.552.315-.8.315a.31.31 0 01-.01-.618h.01c.09 0 .235-.062.438-.198l.04-.027c.077-.054.163-.117.27-.199l.385-.301.06-.047c.268-.206.506-.373.73-.505l-.633-1.21a.309.309 0 01.254-.451l20.287-1.305a.309.309 0 01.228.537zm-1.118.14L2.369 19.03l.423.809c.128-.045.256-.078.388-.1a.31.31 0 01.052-.005c.132 0 .26.032.386.093.153.073.294.179.483.35l.016.015.092.086.144.134.097.089c.065.06.125.114.16.144.485.418.948.658 1.554.736h.011a1.25 1.25 0 00.6-.172l.021-.011.019-.011.018-.011c.141-.084.266-.178.492-.366l.178-.148c.279-.232.426-.342.625-.456.305-.174.612-.266.95-.266.336 0 .644.092.948.266l.023.014c.188.109.335.219.603.442l.177.148c.222.184.346.278.484.36l.027.017.019.01c.215.124.42.185.641.185.222 0 .426-.061.641-.184l.019-.011.018-.011c.141-.084.267-.178.493-.366l.177-.148c.28-.232.427-.342.626-.456.304-.174.612-.266.949-.266.337 0 .644.092.949.266l.025.015c.187.109.334.22.603.443 1.867-.878 3.448-1.811 4.73-2.832l.02-.016zM3.653 2.026C6.073 3.06 8.69 4.941 10.8 7.258c2.46 2.7 4.109 5.828 4.637 9.149a.31.31 0 01-.421.335c-2.348-.945-4.54-1.258-6.59-1.02-1.739.2-3.337.792-4.816 1.703-.294.182-.62-.182-.405-.454 1.856-2.355 2.581-4.99 2.343-7.794-.195-2.292-1.031-4.61-2.284-6.709a.31.31 0 01.388-.442zM10.04 4.45c1.778.543 3.892 2.102 5.782 4.243 1.984 2.248 3.552 4.934 4.347 7.582a.31.31 0 01-.401.38l-.022-.01-.386-.154a10.594 10.594 0 00-.291-.112l-.016-.006c-.68-.247-1.199-.291-1.944-.101a.31.31 0 01-.375-.218C15.378 11.123 13.073 7.276 9.775 5c-.291-.201-.072-.653.266-.55zM4.273 2.996l.008.015c1.028 1.94 1.708 4.031 1.885 6.113.213 2.513-.31 4.906-1.673 7.092l-.02.031.003-.001c1.198-.581 2.47-.969 3.825-1.132l.055-.006c1.981-.23 4.083.029 6.309.837l.066.025-.007-.039c-.593-2.95-2.108-5.737-4.31-8.179l-.07-.078c-1.785-1.96-3.944-3.6-6.014-4.65l-.057-.028zm7.92 3.238l.048.048c2.237 2.295 3.885 5.431 4.974 9.191l.038.132.022-.004c.71-.133 1.284-.063 1.963.18l.027.01.066.024.046.018-.025-.073c-.811-2.307-2.208-4.62-3.936-6.594l-.058-.065c-1.02-1.155-2.103-2.132-3.15-2.856l-.015-.011z"></path></svg>
+                    
+                    <!-- deepseek Logo -->
+                    <svg height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg" style="flex: 0 0 auto; line-height: 1;"><title>DeepSeek</title><path d="M23.748 4.482c-.254-.124-.364.113-.512.234-.051.039-.094.09-.137.136-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.156-.708-.311-.955-.65-.172-.241-.219-.51-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.093.172.187.129.323-.082.28-.18.552-.266.833-.055.179-.137.217-.329.14a5.526 5.526 0 01-1.736-1.18c-.857-.828-1.631-1.742-2.597-2.458a11.365 11.365 0 00-.689-.471c-.985-.957.13-1.743.388-1.836.27-.098.093-.432-.779-.428-.872.004-1.67.295-2.687.684a3.055 3.055 0 01-.465.137 9.597 9.597 0 00-2.883-.102c-1.885.21-3.39 1.102-4.497 2.623C.082 8.606-.231 10.684.152 12.85c.403 2.284 1.569 4.175 3.36 5.653 1.858 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.133-.284 4.994-1.86.47.234.962.327 1.78.397.63.059 1.236-.03 1.705-.128.735-.156.684-.837.419-.961-2.155-1.004-1.682-.595-2.113-.926 1.096-1.296 2.746-2.642 3.392-7.003.05-.347.007-.565 0-.845-.004-.17.035-.237.23-.256a4.173 4.173 0 001.545-.475c1.396-.763 1.96-2.015 2.093-3.517.02-.23-.004-.467-.247-.588zM11.581 18c-2.089-1.642-3.102-2.183-3.52-2.16-.392.024-.321.471-.235.763.09.288.207.486.371.739.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.167-1.361-.802-2.5-1.86-3.301-3.307-.774-1.393-1.224-2.887-1.298-4.482-.02-.386.093-.522.477-.592a4.696 4.696 0 011.529-.039c2.132.312 3.946 1.265 5.468 2.774.868.86 1.525 1.887 2.202 2.891.72 1.066 1.494 2.082 2.48 2.914.348.292.625.514.891.677-.802.09-2.14.11-3.054-.614zm1-6.44a.306.306 0 01.415-.287.302.302 0 01.2.288.306.306 0 01-.31.307.303.303 0 01-.304-.308zm3.11 1.596c-.2.081-.399.151-.59.16a1.245 1.245 0 01-.798-.254c-.274-.23-.47-.358-.552-.758a1.73 1.73 0 01.016-.588c.07-.327-.008-.537-.239-.727-.187-.156-.426-.199-.688-.199a.559.559 0 01-.254-.078c-.11-.054-.2-.19-.114-.358.028-.054.16-.186.192-.21.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.391.451.462.576.685.914.176.265.336.537.445.848.067.195-.019.354-.25.452z" fill="#4D6BFE"></path></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>为何选择 UIUI API？</h2>
+                    <p>我们不仅仅是API的搬运工，更是您AI应用开发的加速器，为您提供稳定、高效且易于管理的一站式解决方案。</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card fade-in" style="transition-delay: 100ms;">
+                        <div class="icon">🔗</div>
+                        <h3>统一API接口</h3>
+                        <p>告别繁琐的多平台适配。一个API密钥，一套开发文档，即可无缝切换和调用所有主流AI模型。</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 200ms;">
+                        <div class="icon">⚡</div>
+                        <h3>极致性能</h3>
+                        <p>通过智能路由和全球节点优化，我们为您提供低延迟、高并发的API请求体验，确保您的应用始终流畅响应。</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 300ms;">
+                        <div class="icon">💰</div>
+                        <h3>透明成本控制</h3>
+                        <p>统一的计费和账单系统，让您的成本一目了然。按需付费，无隐藏费用，最大化您的投入产出比。</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 400ms;">
+                        <div class="icon">🛡️</div>
+                        <h3>企业级安全</h3>
+                        <p>采用银行级加密标准，确保您的数据传输安全。支持私有部署，满足企业合规需求。</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 500ms;">
+                        <div class="icon">📊</div>
+                        <h3>实时监控分析</h3>
+                        <p>强大的仪表盘提供实时使用数据、成本分析和性能监控，助您优化AI应用表现。</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 600ms;">
+                        <div class="icon">🚀</div>
+                        <h3>自动扩缩容</h3>
+                        <p>根据您的请求量自动调整资源，无需担心流量峰值，确保服务始终稳定可用。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="use-cases">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>多样化的使用场景</h2>
+                    <p>无论您是构建聊天机器人、内容生成器还是智能分析系统，UIUI API都能完美支持</p>
+                </div>
+                <div class="use-cases-grid">
+                    <div class="use-case-item slide-in-left">
+                        <span class="emoji">💬</span>
+                        <h3>智能客服</h3>
+                        <p>构建7x24小时在线的智能客服系统，提升客户满意度</p>
+                    </div>
+                    <div class="use-case-item slide-in-left" style="transition-delay: 100ms;">
+                        <span class="emoji">✍️</span>
+                        <h3>内容创作</h3>
+                        <p>自动生成高质量的文章、营销文案和社交媒体内容</p>
+                    </div>
+                    <div class="use-case-item slide-in-left" style="transition-delay: 200ms;">
+                        <span class="emoji">🎨</span>
+                        <h3>图像生成</h3>
+                        <p>利用DALL-E和Midjourney创建独特的视觉内容</p>
+                    </div>
+                    <div class="use-case-item slide-in-right">
+                        <span class="emoji">📚</span>
+                        <h3>教育辅导</h3>
+                        <p>打造个性化的AI教师，提供一对一学习指导</p>
+                    </div>
+                    <div class="use-case-item slide-in-right" style="transition-delay: 100ms;">
+                        <span class="emoji">💡</span>
+                        <h3>创意助手</h3>
+                        <p>激发创意灵感，协助头脑风暴和项目规划</p>
+                    </div>
+                    <div class="use-case-item slide-in-right" style="transition-delay: 200ms;">
+                        <span class="emoji">📈</span>
+                        <h3>数据分析</h3>
+                        <p>智能分析复杂数据，生成洞察报告和预测</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Developer Section -->
+        <section id="developer" class="section">
+            <div class="container developer-section fade-in">
+                <div class="developer-content">
+                    <div class="developer-text">
+                        <h2>为开发者而生</h2>
+                        <p>我们深知开发者的需求。简洁的设计、清晰的文档和强大的功能，让您可以专注于创造，而非繁琐的集成工作。</p>
+                        <div class="developer-features">
+                            <div class="dev-feature">
+                                <span class="check">✓</span>
+                                <span>完整的SDK支持</span>
+                            </div>
+                            <div class="dev-feature">
+                                <span class="check">✓</span>
+                                <span>RESTful API设计</span>
+                            </div>
+                            <div class="dev-feature">
+                                <span class="check">✓</span>
+                                <span>详尽的代码示例</span>
+                            </div>
+                            <div class="dev-feature">
+                                <span class="check">✓</span>
+                                <span>实时技术支持</span>
+                            </div>
+                        </div>
+                        <a href="https://uiuiapi.com" class="cta-button">查看完整文档</a>
+                    </div>
+                    <div class="code-showcase">
+                        <div class="code-header">
+                            <div class="code-dot"></div>
+                            <div class="code-dot"></div>
+                            <div class="code-dot"></div>
+                            <div class="code-tabs">
+                                <button class="code-tab active" data-lang="python">Python</button>
+                                <button class="code-tab" data-lang="javascript">JavaScript</button>
+                                <button class="code-tab" data-lang="curl">cURL</button>
+                            </div>
+                        </div>
+                        <div class="code-content">
+                            <pre><div id="code-typing"></div><span id="typing-cursor"></span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="section pricing-section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>价格说明</h2>
+                    <p>怎么得出我们的价格为官方的48.4%</p>
+                </div>
+                <div class="container" style="max-width: 1000px; margin: 0 auto;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 40px;">
+                        <!-- 左侧：步骤流程图和举例说明 -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <!-- 步骤流程图 -->
+                            <div style="background: var(--card-bg); padding: 30px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border-color);">
+                                <h3 style="margin-bottom: 30px; text-align: center; color: var(--primary-color); font-size: 24px;">价格计算步骤</h3>
+                                <div style="display: flex; flex-direction: column; gap: 30px;">
+                                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                                        <div style="min-width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 20px; box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);">1</div>
+                                        <div style="flex: 1;">
+                                            <h4 style="margin-bottom: 8px; color: #fff; font-size: 18px;">官方API按美元计费</h4>
+                                            <p style="color: var(--text-secondary); line-height: 1.6;">OpenAI官方GPT-4o价格: <strong style="color: #fff;">$2.5</strong>/1M tokens</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                                        <div style="min-width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 20px; box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);">2</div>
+                                        <div style="flex: 1;">
+                                            <h4 style="margin-bottom: 8px; color: #fff; font-size: 18px;">我们提供优惠汇率</h4>
+                                            <p style="color: var(--text-secondary); line-height: 1.6;"><strong style="color: var(--success-color);">3.39</strong> 人民币 = <strong style="color: var(--success-color);">1</strong> 美元</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                                        <div style="min-width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 20px; box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);">3</div>
+                                        <div style="flex: 1;">
+                                            <h4 style="margin-bottom: 8px; color: #fff; font-size: 18px;">实际价格优势</h4>
+                                            <p style="color: var(--text-secondary); line-height: 1.6;">相当于官方价格的 <strong style="color: var(--accent-color); font-size: 20px;">48.4%</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 举例说明 -->
+                            <div style="background: linear-gradient(135deg, rgba(106, 17, 203, 0.15), rgba(37, 117, 252, 0.15)); padding: 35px; border-radius: 16px; border: 2px solid var(--primary-color); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: 15px; right: 20px; background: var(--gradient-primary); color: #fff; padding: 8px 25px; border-radius: 25px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">实例对比</div>
+                                <h3 style="margin-bottom: 35px; margin-top: 15px; text-align: center; color: #fff; font-size: 26px;">
+                                    <span style="display: inline-block; animation: pulse 2s ease-in-out infinite;">💡</span> 举例说明
+                                </h3>
+                                
+                                <!-- 价格对比卡片 -->
+                                <div style="background: rgba(0, 0, 0, 0.3); padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                                        <div style="background: rgba(255, 107, 107, 0.1); padding: 25px; border-radius: 12px; text-align: center; border: 1px solid rgba(255, 107, 107, 0.3);">
+                                            <h4 style="color: #ff6b6b; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">官方价格</h4>
+                                            <p style="color: #fff; font-size: 36px; font-weight: 700; margin-bottom: 5px; line-height: 1;">$2.50</p>
+                                            <p style="color: var(--text-secondary); font-size: 14px;">/ 1M tokens</p>
+                                        </div>
+                                        <div style="background: rgba(81, 207, 102, 0.1); padding: 25px; border-radius: 12px; text-align: center; border: 2px solid var(--success-color); box-shadow: 0 0 20px rgba(81, 207, 102, 0.2);">
+                                            <h4 style="color: var(--success-color); margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">我们的价格</h4>
+                                            <p style="color: #fff; font-size: 36px; font-weight: 700; margin-bottom: 5px; line-height: 1;">$1.21</p>
+                                            <p style="color: var(--text-secondary); font-size: 14px;">/ 1M tokens</p>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <span style="display: inline-block; background: linear-gradient(135deg, var(--accent-color), var(--primary-color)); color: #fff; padding: 12px 35px; border-radius: 30px; font-weight: 600; font-size: 22px; animation: bounce 2s ease-in-out infinite; box-shadow: 0 5px 20px rgba(106, 17, 203, 0.4);">
+                                            节省 51.6% 🎉
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 充值优惠说明 -->
+                                <div style="background: rgba(81, 207, 102, 0.15); border: 1px solid var(--success-color); padding: 25px; border-radius: 12px; margin-bottom: 15px;">
+                                    <h4 style="color: var(--success-color); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 20px;">
+                                        <span style="font-size: 28px;">💰</span> 充值优惠
+                                    </h4>
+                                    <p style="color: #fff; font-size: 18px; line-height: 1.8;">
+                                        充值 <span style="color: var(--accent-color); font-weight: 700; font-size: 24px;">339元</span> 人民币<br>
+                                        = <span style="color: var(--success-color); font-weight: 700; font-size: 24px;">$100</span> 美元额度
+                                    </p>
+                                </div>
+                                
+                                <!-- 成本对比 -->
+                                <div style="background: rgba(106, 17, 203, 0.1); border: 1px solid var(--primary-color); padding: 25px; border-radius: 12px;">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 20px;">
+                                        <span style="font-size: 28px;">📊</span> 成本对比
+                                    </h4>
+                                    <p style="color: #fff; font-size: 16px; line-height: 2;">
+                                        官方汇率充值 $100 需要 <span style="text-decoration: line-through; color: #999; font-size: 18px;">￥700+</span><br>
+                                        通过我们充值仅需 <span style="color: var(--success-color); font-weight: 700; font-size: 24px;">￥339</span><br>
+                                        <span style="display: inline-block; margin-top: 15px; background: var(--gradient-primary); color: #fff; padding: 10px 25px; border-radius: 25px; font-weight: 600; font-size: 18px;">
+                                            立省 <span style="font-size: 22px;">￥361+</span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：特别说明 -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <div style="background: var(--card-bg); padding: 40px; border-radius: 16px; height: 100%; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                                <h3 style="margin-bottom: 35px; text-align: center; color: var(--primary-color); font-size: 24px;">特别说明</h3>
+                                
+                                <div style="flex: 1;">
+                                    <div style="margin-bottom: 25px;">
+                                        <h4 style="color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                                            <span style="color: var(--success-color); font-size: 20px;">✓</span> 价格优势来源
+                                        </h4>
+                                        <p style="color: var(--text-secondary); line-height: 1.8; padding-left: 30px;">
+                                            我们完全保持与官方一致的计费标准，通过提供优惠的人民币兑美元汇率（3.39:1）来实现成本节省。
+                                        </p>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 25px;">
+                                        <h4 style="color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                                            <span style="color: var(--success-color); font-size: 20px;">✓</span> 使用体验一致
+                                        </h4>
+                                        <p style="color: var(--text-secondary); line-height: 1.8; padding-left: 30px;">
+                                            API调用方式、计费模式与直接使用官方API完全一致，无需修改任何代码。
+                                        </p>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 25px;">
+                                        <h4 style="color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                                            <span style="color: var(--success-color); font-size: 20px;">✓</span> 实时汇率展示
+                                        </h4>
+                                        <p style="color: var(--text-secondary); line-height: 1.8; padding-left: 30px;">
+                                            后台清晰显示每个模型的人民币价格，消费记录透明可查。
+                                        </p>
+                                    </div>
+                                    
+                                    <div style="background: linear-gradient(135deg, rgba(106, 17, 203, 0.1), rgba(37, 117, 252, 0.1)); padding: 25px; border-radius: 12px; border-left: 4px solid var(--primary-color); margin-bottom: 30px;">
+                                        <h4 style="color: #fff; margin-bottom: 12px; font-size: 18px;">
+                                            🌟 透明价格承诺
+                                        </h4>
+                                        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 0;">
+                                            我们承诺提供市场上最透明的价格体系，无隐藏费用，按需付费，让每一分投入都用在刀刃上。
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div style="text-align: center;">
+                                    <a href="https://uiuiapi.com" class="cta-button" style="padding: 15px 40px; font-size: 16px;">
+                                        查看完整价格表 →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 底部总结 -->
+                    <div style="background: linear-gradient(135deg, rgba(37, 117, 252, 0.1), rgba(106, 17, 203, 0.1)); padding: 40px; border-radius: 16px; text-align: center; border: 1px solid rgba(106, 17, 203, 0.3);">
+                        <h3 style="color: #fff; font-size: 28px; margin-bottom: 20px;">
+                            <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                                为什么选择我们？
+                            </span>
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; max-width: 800px; margin: 0 auto;">
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">💸</div>
+                                <h4 style="color: #fff; margin-bottom: 8px;">成本节省51.6%</h4>
+                                <p style="color: var(--text-secondary); font-size: 14px;">优惠汇率直接降低成本</p>
+                            </div>
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">🚀</div>
+                                <h4 style="color: #fff; margin-bottom: 8px;">即开即用</h4>
+                                <p style="color: var(--text-secondary); font-size: 14px;">无需修改代码，立即使用</p>
+                            </div>
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">🔍</div>
+                                <h4 style="color: #fff; margin-bottom: 8px;">价格透明</h4>
+                                <p style="color: var(--text-secondary); font-size: 14px;">实时查看消费明细</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>听听他们怎么说</h2>
+                    <p>超过50,000名开发者正在使用UIUI API构建他们的AI应用</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card fade-in">
+                        <p class="testimonial-content">"UIUI API让我们的开发效率提升了300%。再也不用为不同AI平台的接口差异而烦恼，一套代码就能调用所有模型。"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">张</div>
+                            <div class="author-info">
+                                <h4>张明</h4>
+                                <p>TechStart创始人</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card fade-in" style="transition-delay: 100ms;">
+                        <p class="testimonial-content">"成本透明，性能稳定，技术支持响应迅速。UIUI API是我们构建AI客服系统的最佳选择。"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">李</div>
+                            <div class="author-info">
+                                <h4>李雪</h4>
+                                <p>CustomerFirst技术总监</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card fade-in" style="transition-delay: 200ms;">
+                        <p class="testimonial-content">"从POC到生产环境，UIUI API的自动扩容功能让我们无需担心流量激增。真正的企业级服务！"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">王</div>
+                            <div class="author-info">
+                                <h4>王强</h4>
+                                <p>AILab首席架构师</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="section faq-section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>常见问题</h2>
+                    <p>我们整理了用户最关心的问题，希望能帮助您更好地了解UIUI API</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item fade-in">
+                        <div class="faq-question">
+                            <span>UIUI API支持哪些AI模型？</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>我们目前支持OpenAI（GPT-4o、GPT-4.1、o3等几乎OpenAI全系模型）、Anthropic（Claude 3.7、Claude 4）、Google（Gemini-2.5-Pro）、Midjourney等几十+主流AI模型，并持续增加新的模型支持。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item fade-in" style="transition-delay: 100ms;">
+                        <div class="faq-question">
+                            <span>如何计费？有隐藏费用吗？</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>我们采用预付费模式，您充值多少就可以使用多少，没有任何隐藏费用。所有模型的价格都在控制台中透明展示，您可以实时查看消费情况。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item fade-in" style="transition-delay: 200ms;">
+                        <div class="faq-question">
+                            <span>是否提供免费试用？</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>是的！新注册用户可获得价值$0.2~$1的免费额度，足够您测试各种AI模型。无需绑定信用卡，注册即可使用。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item fade-in" style="transition-delay: 300ms;">
+                        <div class="faq-question">
+                            <span>API的稳定性如何？</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>我们承诺99.9%的服务可用性，采用多地域部署和智能路由，确保您的请求始终得到快速响应。企业版用户还享有SLA保障。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item fade-in" style="transition-delay: 400ms;">
+                        <div class="faq-question">
+                            <span>是否支持私有化部署？</span>
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>企业版客户可以选择私有化部署方案，我们提供完整的部署文档和技术支持，确保您的数据安全和合规需求。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section">
+            <div class="container">
+                <div class="cta-section scale-in">
+                    <h2>准备好开启您的AI之旅了吗？</h2>
+                    <p>立即注册，获取免费额度，5分钟内开始使用所有AI模型</p>
+                    <a href="https://uiuiapi.com" class="cta-button">免费开始 →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>UIUI API</h3>
+                    <p>您的终极AI模型网关，让AI集成变得简单、高效、可靠。</p>
+                    <div class="social-links">
+                        <a href="#" title="Twitter">𝕏</a>
+                        <a href="#" title="GitHub">⚡</a>
+                        <a href="#" title="Discord">💬</a>
+                        <a href="#" title="YouTube">▶</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>产品</h3>
+                    <ul>
+                        <li><a href="#features">核心功能</a></li>
+                        <li><a href="#pricing">价格方案</a></li>
+                        <li><a href="https://uiuiapi.com/models">支持模型</a></li>
+                        <li><a href="https://uiuiapi.com/changelog">更新日志</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>开发者</h3>
+                    <ul>
+                        <li><a href="https://uiuiapi.com/docs">API文档</a></li>
+                        <li><a href="https://uiuiapi.com/sdk">SDK下载</a></li>
+                        <li><a href="https://uiuiapi.com/examples">代码示例</a></li>
+                        <li><a href="https://uiuiapi.com/status">服务状态</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>公司</h3>
+                    <ul>
+                        <li><a href="https://uiuiapi.com/about">关于我们</a></li>
+                        <li><a href="https://uiuiapi.com/blog">技术博客</a></li>
+                        <li><a href="https://uiuiapi.com/careers">加入我们</a></li>
+                        <li><a href="https://uiuiapi.com/contact">联系我们</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UIUI API. All rights reserved.</p>
+                <div>
+                    <a href="https://uiuiapi.com/privacy">隐私政策</a> | 
+                    <a href="https://uiuiapi.com/terms">服务条款</a> | 
+                    <a href="https://uiuiapi.com/security">安全中心</a>
+                </div>
+            </div>
+        </div>
+    </footer>  -->
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop">↑</div>
+
+    <!-- JavaScript -->
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+        });
+
+        // Particles Background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            mobileMenuBtn.textContent = mobileMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Code Typing Effect
+        const codeExamples = {
+            python: `<span class="comment"># 使用OpenAI API调用GPT-4o</span>
+<span class="keyword">from</span> <span class="variable">openai</span> <span class="keyword">import</span> <span class="variable">OpenAI</span>
+
+<span class="variable">client</span> = <span class="variable">OpenAI</span>(
+    <span class="variable">api_key</span>=<span class="string">"your-api-key"</span>,
+    <span class="variable">base_url</span>=<span class="string">"https://api.uiuiapi.com/v1"</span>  <span class="comment"># 替换为UIUI API地址</span>
+)
+
+<span class="variable">response</span> = <span class="variable">client</span>.<span class="variable">chat</span>.<span class="variable">completions</span>.<span class="function">create</span>(
+    <span class="variable">model</span>=<span class="string">"gpt-4o"</span>,
+    <span class="variable">messages</span>=[
+        {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: <span class="string">"You are a helpful assistant."</span>},
+        {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"Hello, AI!"</span>}
+    ]
+)
+
+<span class="keyword">print</span>(<span class="variable">response</span>.<span class="variable">choices</span>[<span class="number">0</span>].<span class="variable">message</span>.<span class="variable">content</span>)`,
+
+            javascript: `<span class="comment">// 使用OpenAI SDK调用GPT-4o</span>
+<span class="keyword">import</span> <span class="variable">OpenAI</span> <span class="keyword">from</span> <span class="string">'openai'</span>;
+
+<span class="keyword">const</span> <span class="variable">openai</span> = <span class="keyword">new</span> <span class="function">OpenAI</span>({
+    <span class="variable">apiKey</span>: <span class="string">'your-api-key'</span>,
+    <span class="variable">baseURL</span>: <span class="string">'https://api.uiuiapi.com/v1'</span>,  <span class="comment">// 替换为UIUI API地址</span>
+});
+
+<span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="variable">openai</span>.<span class="variable">chat</span>.<span class="variable">completions</span>.<span class="function">create</span>({
+    <span class="variable">model</span>: <span class="string">'gpt-4o'</span>,
+    <span class="variable">messages</span>: [
+        { <span class="variable">role</span>: <span class="string">'system'</span>, <span class="variable">content</span>: <span class="string">'You are a helpful assistant.'</span> },
+        { <span class="variable">role</span>: <span class="string">'user'</span>, <span class="variable">content</span>: <span class="string">'Hello, AI!'</span> }
+    ],
+});
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">response</span>.<span class="variable">choices</span>[<span class="number">0</span>].<span class="variable">message</span>.<span class="variable">content</span>);`,
+
+            curl: `<span class="comment"># 使用cURL调用OpenAI格式的API</span>
+<span class="variable">curl</span> https://api.uiuiapi.com/v1/chat/completions \\
+  -H <span class="string">"Content-Type: application/json"</span> \\
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \\
+  -d <span class="string">'{
+    "model": "gpt-4o",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "Hello, AI!"
+      }
+    ],
+    "temperature": 0.7
+  }'</span>`
+        };
+
+        let currentCode = 'python';
+        let typingIndex = 0;
+        let typingInterval;
+
+        function typeCode() {
+            const codeElement = document.getElementById('code-typing');
+            const code = codeExamples[currentCode];
+            
+            if (typingIndex < code.length) {
+                codeElement.innerHTML = code.substring(0, typingIndex);
+                typingIndex += 5;
+            } else {
+                clearInterval(typingInterval);
+                setTimeout(() => {
+                    typingIndex = 0;
+                    typeCode();
+                }, 3000);
+            }
+        }
+
+        // Start typing animation
+        typingInterval = setInterval(typeCode, 30);
+
+        // Code tab switching
+        const codeTabs = document.querySelectorAll('.code-tab');
+        codeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                codeTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                currentCode = tab.getAttribute('data-lang');
+                typingIndex = 0;
+                clearInterval(typingInterval);
+                typingInterval = setInterval(typeCode, 30);
+            });
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Close other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+        animatedElements.forEach(el => observer.observe(el));
+
+        // Smooth Scroll for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Close mobile menu if open
+                    mobileMenu.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                }
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Number Counter Animation
+        function animateNumbers() {
+            const stats = [
+                { element: document.querySelector('.stat-item:nth-child(1) h3'), target: 50, suffix: 'K+' },
+                { element: document.querySelector('.stat-item:nth-child(2) h3'), target: 10, suffix: 'M+' },
+                { element: document.querySelector('.stat-item:nth-child(3) h3'), target: 99.9, suffix: '%' },
+                { element: document.querySelector('.stat-item:nth-child(4) h3'), target: 15, suffix: '+' }
+            ];
+
+            stats.forEach(stat => {
+                let current = 0;
+                const increment = stat.target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        current = stat.target;
+                        clearInterval(timer);
+                    }
+                    stat.element.textContent = (stat.target % 1 === 0 ? Math.floor(current) : current.toFixed(1)) + stat.suffix;
+                }, 30);
+            });
+        }
+
+        // Trigger number animation when stats section is visible
+        const statsSection = document.querySelector('.stats-section');
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNumbers();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statsObserver.observe(statsSection);
+    </script>
+</body>
+</html>
